@@ -18,7 +18,7 @@ const Fectch = () => {
   const [selectedCountryIndex, setSelectedCountryIndex] = useState(null);
 
   useEffect(() => {
-    fetch("./data.json")
+    fetch(`${process.env.PUBLIC_URL}/data.json`)
       .then((res) => res.json())
       .then((countries) => {
         const shuffled = countries.sort(() => Math.random() - 0.5);
