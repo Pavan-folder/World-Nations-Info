@@ -18,8 +18,7 @@ const Fetch = () => {
   const [selectedCountryIndex, setSelectedCountryIndex] = useState(null);
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data.json`)
-
+    fetch("/data.json")
       .then((res) => res.json())
       .then((countries) => {
         const shuffled = countries.sort(() => Math.random() - 0.5);
@@ -68,6 +67,11 @@ const Fetch = () => {
 
   const displayedCountries =
     searchText.trim() !== "" || selectedRegion ? filteredCountries : data;
+
+  // Function to construct the flag URL
+  const getFlagUrl = (countryCode) => {
+    return `https://flagcdn.com/w320/${countryCode.toLowerCase()}.png`; // External flag URL
+  };
 
   return (
     <div>
@@ -151,7 +155,7 @@ const Fetch = () => {
                 <>
                   <img
                     className="flag-img"
-                    src={country.flags?.png || country.flags?.svg}
+                    src={getFlagUrl(country.alpha2Code)} // Use online flag
                     alt={country.name}
                   />
                   <div className="country-info">
@@ -208,7 +212,7 @@ const Fetch = () => {
             >
               <img
                 className="flag-img"
-                src={country.flags?.png || country.flags?.svg}
+                src={getFlagUrl(country.alpha2Code)} // Use online flag
                 alt={country.name}
               />
               <div className="country-info">
@@ -230,3 +234,4 @@ const Fetch = () => {
 };
 
 export default Fetch;
+
