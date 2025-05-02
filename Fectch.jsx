@@ -18,11 +18,14 @@ const Fetch = () => {
   const [selectedCountryIndex, setSelectedCountryIndex] = useState(null);
 
   useEffect(() => {
-    fetch(`${process.env.PUBLIC_URL}/data.json`)
+    fetch("data.json")
       .then((res) => res.json())
       .then((countries) => {
         const shuffled = countries.sort(() => Math.random() - 0.5);
         setData(shuffled.slice(0, 300));
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
   }, []);
 
@@ -51,6 +54,8 @@ const Fetch = () => {
     .filter((country) =>
       country.name.toLowerCase().includes(searchText.toLowerCase())
     );
+
+  const regions = [...new Set(data.map((country) => country.region))];
 
   const fullCountry = (index) => {
     setSelectedCountryIndex(index);
@@ -113,19 +118,23 @@ const Fetch = () => {
 
           {showRegionDropdown && (
             <div className="region-dropdown">
-              {["Asia", "Europe", "Americas", "Africa", "Oceania"].map(
-                (region) => (
-                  <button
-                    key={region}
-                    onClick={() => handleRegionSelect(region)}
-                  >
-                    {region}
-                  </button>
-                )
-              )}
+              {regions.map((region) => (
+                <button key={region} onClick={() => handleRegionSelect(region)}>
+                  {region}
+                </button>
+              ))}
             </div>
           )}
         </div>
+
+        {selectedRegion && (
+          <button
+            onClick={() => setSelectedRegion("")}
+            className="clear-region-btn"
+          >
+            Clear Region Filter
+          </button>
+        )}
       </header>
 
       <div className="grid-container">
@@ -141,7 +150,7 @@ const Fetch = () => {
                 <>
                   <img
                     className="flag-img"
-                    src={country.flags.png || country.flags.svg}
+                    src={country.flags?.png || country.flags?.svg}
                     alt={country.name}
                   />
                   <div className="country-info">
@@ -154,7 +163,8 @@ const Fetch = () => {
                       km²
                     </p>
                     <p>
-                      <strong>Timezones:</strong> {country.timezones.join(", ")}
+                      <strong>Timezones:</strong>{" "}
+                      {country.timezones?.join(", ") ?? "N/A"}
                     </p>
                     <p>
                       <strong>Borders:</strong>{" "}
@@ -165,13 +175,29 @@ const Fetch = () => {
                     </p>
                     <p>
                       <strong>Calling Codes:</strong> +
-                      {country.callingCodes.join(", +")}
+                      {country.callingCodes?.join(", +")}
+                    </p>
+                    <p>
+                      <strong>Border Countries:</strong>
+                      <ul>
+                        {country.borders?.length > 0 ? (
+                          country.borders.map((code, idx) => (
+                            <li key={idx}>{code}</li>
+                          ))
+                        ) : (
+                          <li>None</li>
+                        )}
+                      </ul>
                     </p>
                   </div>
                 </>
               );
             })()}
           </div>
+        ) : displayedCountries.length === 0 ? (
+          <p style={{ textAlign: "center", marginTop: "2rem" }}>
+            No countries found.
+          </p>
         ) : (
           displayedCountries.map((country, index) => (
             <div
@@ -181,7 +207,7 @@ const Fetch = () => {
             >
               <img
                 className="flag-img"
-                src={country.flags.png || country.flags.svg}
+                src={country.flags?.png || country.flags?.svg}
                 alt={country.name}
               />
               <div className="country-info">
@@ -190,7 +216,8 @@ const Fetch = () => {
                   <strong>Subregion:</strong> {country.subregion}
                 </p>
                 <p>
-                  <strong>Area:</strong> {country.area?.toLocaleString()} km²
+                  <strong>Area:</strong>{" "}
+                  {country.area?.toLocaleString() ?? "N/A"} km²
                 </p>
               </div>
             </div>

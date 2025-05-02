@@ -28,6 +28,7 @@ header {
   background-color: #1e1e1e;
 }
 
+/* Search Section */
 .search-container {
   display: flex;
   align-items: center;
@@ -50,7 +51,8 @@ header {
   background: #2c2c2c;
 }
 
-.region-dropdown {
+/* Dropdown Region Filter */
+.lll {
   display: none;
   flex-direction: column;
   background: white;
@@ -60,12 +62,12 @@ header {
   padding: 0.5rem;
 }
 
-.dark-mode .region-dropdown {
+.dark-mode .lll {
   background: #2c2c2c;
   border-color: #444;
 }
 
-.region-dropdown button {
+.lll button {
   background: none;
   border: none;
   padding: 0.3rem;
@@ -75,33 +77,40 @@ header {
   color: inherit;
 }
 
-.region-dropdown button:hover {
+.lll button:hover {
   background-color: #f0f0f0;
 }
 
-.dark-mode .region-dropdown button:hover {
+.dark-mode .lll button:hover {
   background-color: #3a3a3a;
 }
 
+/* Toggle region list when active */
+.ll {
+  display: flex;
+}
+
+/* Grid of Countries */
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 items per row by default */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
   padding: 2rem;
 }
 
 @media (max-width: 1024px) {
   .grid-container {
-    grid-template-columns: repeat(2, 1fr); /* 2 items per row on medium screens */
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .grid-container {
-    grid-template-columns: 1fr; /* 1 item per row on small screens */
+    grid-template-columns: 1fr;
   }
 }
 
+/* Country Card */
 .country-card {
   background: #fff;
   border-radius: 10px;
@@ -121,22 +130,29 @@ header {
   color: #fff;
 }
 
+/* Flag Image */
 .flag-img {
   width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-bottom: 1px solid #eee;
+  max-width: 250px;
+  height: auto;
+  transition: transform 0.3s ease;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.country-info {
-  padding: 1rem;
+/* Enlarged flag in detail view */
+.full-screen .flag-img {
+  max-width: 500px;
+  transform: scale(1.1);
 }
 
+/* Full-screen detailed view */
 .full-screen {
   grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 20px;
 }
 
 .back-button {
@@ -207,14 +223,23 @@ header {
     font-size: 1rem;
   }
 
-  .region-dropdown {
+  .lll {
     width: 100%;
     position: relative;
   }
 
-  .region-dropdown button {
+  .lll button {
     width: 100%;
     text-align: left;
     padding: 0.5rem 0.8rem;
+  }
+
+  button[style*="width: 150px"] {
+    width: 100% !important;
+    text-align: left;
+  }
+
+  h4 {
+    font-size: 1.2rem;
   }
 }
