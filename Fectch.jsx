@@ -18,14 +18,11 @@ const Fetch = () => {
   const [selectedCountryIndex, setSelectedCountryIndex] = useState(null);
 
   useEffect(() => {
-    fetch("data.json")
+    fetch(`${process.env.PUBLIC_URL}/data.json`)
       .then((res) => res.json())
       .then((countries) => {
         const shuffled = countries.sort(() => Math.random() - 0.5);
         setData(shuffled.slice(0, 300));
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
       });
   }, []);
 
@@ -54,8 +51,6 @@ const Fetch = () => {
     .filter((country) =>
       country.name.toLowerCase().includes(searchText.toLowerCase())
     );
-
-  const regions = [...new Set(data.map((country) => country.region))];
 
   const fullCountry = (index) => {
     setSelectedCountryIndex(index);
@@ -118,11 +113,16 @@ const Fetch = () => {
 
           {showRegionDropdown && (
             <div className="region-dropdown">
-              {regions.map((region) => (
-                <button key={region} onClick={() => handleRegionSelect(region)}>
-                  {region}
-                </button>
-              ))}
+              {["Asia", "Europe", "Americas", "Africa", "Oceania"].map(
+                (region) => (
+                  <button
+                    key={region}
+                    onClick={() => handleRegionSelect(region)}
+                  >
+                    {region}
+                  </button>
+                )
+              )}
             </div>
           )}
         </div>
@@ -166,18 +166,6 @@ const Fetch = () => {
                     <p>
                       <strong>Calling Codes:</strong> +
                       {country.callingCodes.join(", +")}
-                    </p>
-                    <p>
-                      <strong>Border Countries:</strong>
-                      <ul>
-                        {country.borders?.length > 0 ? (
-                          country.borders.map((code, idx) => (
-                            <li key={idx}>{code}</li>
-                          ))
-                        ) : (
-                          <li>None</li>
-                        )}
-                      </ul>
                     </p>
                   </div>
                 </>
